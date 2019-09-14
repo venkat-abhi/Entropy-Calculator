@@ -26,11 +26,12 @@ def main():
 
 	possible_vals = dict(((chr(x), 0) for x in range(0, 256)))
 
-	entropy = 0
+	entropy = 0.0
 
 	with open(file_path, 'rb') as f:
 		data = f.read()
 		if data:
+			# Calculate the count of each character
 			for byte in data:
 				possible_vals[chr(byte)] +=1
 
@@ -40,13 +41,23 @@ def main():
 				if possible_vals[count] == 0:
 					continue
 
-				# p - probability of seeing this byte in the file
+				# p = probability of seeing this byte in the file
 				p = float(possible_vals[count] / data_len)
-				#entropy -=  p * math.log(p, 2) # equivalent to below if we divide the final entropy by 8
-				entropy -= p * math.log(p, 256)
-			#entropy = entropy / 8
+				entropy -= p * math.log(p, 2)
+				#entropy -=  p * math.log(p, 256) # equivalent to below if we multiply the final entropy by 8
+			#entropy = entropy * 8
 
-	print(entropy)
+
+		print("[*] The 8 bits entropy of the file is ", entropy)
+"""
+
+			for x in range(0, 256):
+				p = float(possible_vals[chr(x)]) / data_len
+				if p > 0:
+					entropy -= p * math.log(p, 2)
+"""
+
+
 
 if __name__ == "__main__":
 	main()
